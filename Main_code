@@ -1,0 +1,207 @@
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Scanner;
+
+public class tictac {
+    public  static boolean win = false;
+    public static String winner = null;
+    public static boolean isTie = false;
+    static   int num2=0;
+    //List ,used here to prevent overlapping of positions
+   public static List<Integer> positions = new ArrayList<>();
+
+
+
+    public static String boardTotal = null;
+    static Scanner scn = new Scanner(System.in);
+    public static void main(String[] args) {
+
+
+        String[][] template = {{" ", "|", " ", "|", " "},
+                {"-", "-", "-", "-", "-"},
+                {" ", "|", " ", "|", " "},
+                {"-", "-", "-", "-", "-"},
+                {" ", "|", " ", "|", " "}};
+        System.out.println("Hello!,Hello!,Hello");
+        System.out.println("Welcome to the best ever version of TIC-TAC-TOE");
+        System.out.println("The rules are simple: There are two players and player1 will always start with X");
+        System.out.println("Just type the slot number you want to place your marker in,cheers!!");
+        System.out.println("Here we go!!!");
+        //labeled the loop to break easily
+       loop1:
+        while (!win || !isTie) {
+            printer(template);
+
+
+            System.out.println("Player 1, enter a number between 1 & 9");
+            int num = scn.nextInt();
+            if (isValidInput(num) && !positions.contains(num)) {
+                playGame(template, "X", num);
+                positions.add(num);
+                printer(template);
+                if (checkWinner(template) || istie(template)) {
+                    break;
+                }
+            } else {
+                System.out.println("Invalid input or position already occupied : try again");
+                continue;
+            }
+            do {
+                System.out.println("Player 2,go ahead");
+                num2 = scn.nextInt();
+              while(positions.contains(num2)){
+                  System.out.println("Position already taken,try again");
+                  num2 = scn.nextInt();
+              }
+                if (isValidInput(num2)) {
+                    playGame(template, "0", num2);
+                    positions.add(num2);
+                    if (checkWinner(template) || istie(template)) {
+                        break loop1;
+                    }
+                    checkWinner(template);
+                    istie(template);
+
+                } else {
+                    System.out.println("Invalid input, try again");
+                }
+
+            } while (!isValidInput(num2));
+        }
+
+
+        printer(template);
+        if(isTie){
+            System.out.println(" It is an Unfortunate Tie");
+        }else {
+            System.out.println("Winner Winner Chicken Dinner");
+            System.out.println("Congrats " + winner);
+        }
+       }
+       public static void playGame(String[][] board,String token,int player1){
+
+           String type = token;
+
+         switch (player1){
+             case 1 :
+                 board[0][0] = type;
+                 break;
+             case 2 :
+                 board[0][2] = type;
+                 break;
+             case 3 :
+                 board[0][4] = type;
+                 break;
+             case 4 :
+                 board[2][0] = type;
+                 break;
+             case 5 :
+                 board[2][2] = type;
+                 break;
+             case 6 :
+                 board[2][4] = type;
+                 break;
+             case 7 :
+                 board[4][0] = type;
+                 break;
+             case 8:
+                 board[4][2] = type;
+                 break;
+             case 9 :
+                 board[4][4] = type;
+                 break;
+
+         }
+
+
+       }
+//method to print the board
+    public static void printer(String[][] template) {
+        for (String[] R : template) {
+            for (String k : R) {
+                System.out.print(k);
+
+            }
+            System.out.println();
+        }
+
+    }
+    //method to check the winner
+
+    public static boolean checkWinner(String [][] board){
+
+            if ((board[0][0] + board[0][2] + board[0][4]).equalsIgnoreCase("XXX")) {
+                win = true;
+                winner ="Player 1";
+
+            } else if ((board[2][0] + board[2][2] + board[2][4]).equalsIgnoreCase("XXX")) {
+                win = true; winner ="Player 1";
+            } else if ((board[4][0] + board[4][2] + board[4][4]).equalsIgnoreCase("XXX")) {
+                win = true; winner ="Player 1";
+            } else if ((board[2][0] + board[2][2] + board[2][4]).equalsIgnoreCase("000")) {
+                win = true; winner ="Player 2";
+            } else if ((board[4][0] + board[4][2] + board[4][4]).equalsIgnoreCase("000")) {
+                win = true; winner ="Player 2";
+            } else if ((board[0][0] + board[0][2] + board[0][4]).equalsIgnoreCase("000")) {
+                win = true; winner ="Player 2";
+
+            } else if ((board[0][0] + board[2][2] + board[4][4]).equalsIgnoreCase("000")) {
+                win = true; winner ="Player 2";
+
+            } else if ((board[0][0] + board[2][2] + board[4][4]).equalsIgnoreCase("XXX")) {
+                win = true; winner ="Player 1";
+
+            } else if ((board[0][4] + board[2][2] + board[4][0]).equalsIgnoreCase("XXX")) {
+                win = true; winner ="Player 1";
+            } else if ((board[0][4] + board[2][2] + board[4][0]).equalsIgnoreCase("000")) {
+                win = true; winner ="Player 2";
+            }
+            else if((board[0][0] + board[2][0] + board[4][0]).equalsIgnoreCase("000")){
+                win = true;winner ="Player 2";
+
+            }else if ((board[0][2] + board[2][2] + board[4][2]).equalsIgnoreCase("000")){
+                win = true;winner="Player 2";
+            }else if ((board[0][4] + board[2][4] + board[4][4]).equalsIgnoreCase("000")){
+                win = true;winner="Player 2";
+            } else if((board[0][0] + board[2][0] + board[4][0]).equalsIgnoreCase("XXX")){
+                win = true;winner ="Player 1";
+
+            }else if ((board[0][2] + board[2][2] + board[4][2]).equalsIgnoreCase("XXX")){
+                win = true;winner="Player 1";
+            }else if ((board[0][4] + board[2][4] + board[4][4]).equalsIgnoreCase("XXX")){
+                win = true;winner="Player 1";
+            }
+        else {
+                win = false;
+            }
+
+        return win;
+    }
+    //method to check tie
+    public static boolean istie(String[][] board){
+    boardTotal = board[0][4]+board[0][2]+board[0][0]+ board[2][0]+board[2][4]+board[2][2]+board[4][0]+board[4][2]+board[4][4];
+       char[]temp = boardTotal.toCharArray();
+        Arrays.sort(temp);
+        if (String.valueOf(temp).contains("XXXXX")||boardTotal.contains("0000")){
+            isTie = true;
+        }
+   return isTie;
+    }
+    //method to check valid input
+    public static boolean isValidInput(int num){
+        boolean check = false;
+        if (num>0 && num<10){
+            check = true;
+
+        }
+        return check;
+    }
+ // by NIKHIL G,
+
+        }
+
+
+
+
+
